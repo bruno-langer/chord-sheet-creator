@@ -1,4 +1,5 @@
 const TYPES = ['intro', 'verse', 'pre', 'chorus', 'bridge'];
+const STORAGE_KEY = 'cifra_songs_data';
 
 // Initialize TYPE_LABELS dynamically from i18n
 let TYPE_LABELS = {};
@@ -13,7 +14,8 @@ function updateTypeLabels() {
   };
 }
 
-let songs = [
+// Default songs data
+const DEFAULT_SONGS = [
   {
     title: 'Musica Exemplo',
     key: 'F#',
@@ -27,6 +29,32 @@ let songs = [
   }
 ];
 
+// Load songs from localStorage or use default
+function loadSongsFromStorage() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (e) {
+    console.warn('Failed to load songs from localStorage:', e);
+  }
+  return JSON.parse(JSON.stringify(DEFAULT_SONGS));
+}
+
+// Save songs to localStorage
+function saveSongsToStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(songs));
+  } catch (e) {
+    console.warn('Failed to save songs to localStorage:', e);
+  }
+}
+
+let songs = loadSongsFromStorage();
 let currentSongIndex = 0;
 
 // Listen for language changes
@@ -77,6 +105,7 @@ function switchToSong(index) {
   render();
   updatePreview();
   renderSongList();
+  saveSongsToStorage();
 }
 
 function createNewSong() {
@@ -89,6 +118,7 @@ function createNewSong() {
     ]
   };
   songs.push(newSong);
+  saveSongsToStorage();
   switchToSong(songs.length - 1);
 }
 
@@ -102,6 +132,7 @@ function deleteSong(index) {
   if (currentSongIndex >= songs.length) {
     currentSongIndex = songs.length - 1;
   }
+  saveSongsToStorage();
   switchToSong(currentSongIndex);
 }
 
@@ -163,22 +194,26 @@ document.getElementById('sectionList').addEventListener('change', e => {
   const sections = getSections();
   if (a === 'type') { sections[i].type = el.value; render(); updatePreview(); }
   if (a === 'repeat') { sections[i].repeat = Math.max(1, +el.value); updatePreview(); }
+  saveSongsToStorage();
 });
 document.getElementById('sectionList').addEventListener('input', e => {
   const el = e.target, i = +el.dataset.i, a = el.dataset.action;
   const sections = getSections();
   if (a === 'lines') { sections[i].lines = el.value; updatePreview(); }
+  saveSongsToStorage();
 });
 
 document.getElementById('songTitle').addEventListener('input', e => {
   getCurrentSong().title = e.target.value;
   updatePreview();
   renderSongList();
+  saveSongsToStorage();
 });
 
 document.getElementById('songKey').addEventListener('input', e => {
   getCurrentSong().key = e.target.value;
   updatePreview();
+  saveSongsToStorage();
 });
 
 document.getElementById('sectionList').addEventListener('click', e => {
@@ -189,6 +224,7 @@ document.getElementById('sectionList').addEventListener('click', e => {
   if (a === 'del') { sections.splice(i, 1); render(); updatePreview(); }
   if (a === 'up' && i > 0) { [sections[i - 1], sections[i]] = [sections[i], sections[i - 1]]; render(); updatePreview(); }
   if (a === 'down' && i < sections.length - 1) { [sections[i], sections[i + 1]] = [sections[i + 1], sections[i]]; render(); updatePreview(); }
+  saveSongsToStorage();
 });
 
 document.getElementById('addBtn').addEventListener('click', () => {
@@ -196,6 +232,7 @@ document.getElementById('addBtn').addEventListener('click', () => {
   getSections().push({ type, repeat: 1, lines: '' });
   render();
   updatePreview();
+  saveSongsToStorage();
   setTimeout(() => {
     const cards = document.querySelectorAll('.sec-card');
     cards[cards.length - 1]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
