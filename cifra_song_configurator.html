@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="app.title">Configurador de Cifras</title>
+  <link rel="stylesheet" href="cifra_song_configurator.css">
+  <script src="i18n-config.js"></script>
+</head>
+<body>
+  <div class="layout-container">
+    <div class="left-panel">
+      <div class="root">
+        <h2 class="sr-only" data-i18n="app.description">Chord song configurator — build sections and export HTML</h2>
+
+        <!-- Language Selector -->
+        <div style="margin-bottom: 16px; text-align: right;">
+          <select id="languageSelect" onchange="changeLanguage(this.value)" style="font-size: 12px; padding: 4px 8px;">
+            <option value="pt">Português</option>
+            <option value="en">English</option>
+            <option value="es">Español</option>
+          </select>
+        </div>
+
+        <div class="song-manager">
+          <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
+            <label style="font-size: 12px; font-weight: 600; color: var(--color-text-secondary);" data-i18n="songs.label">Songs</label>
+            <button class="icon-btn" id="newSongBtn" style="padding:6px 12px;font-size:12px;" data-i18n="songs.new">+ New</button>
+          </div>
+          <div class="song-list" id="songListPanel"></div>
+        </div>
+
+        <div class="toolbar">
+          <div class="field">
+            <label data-i18n="songs.title">Song title</label>
+            <input type="text" id="songTitle" value="Example" style="width:200px">
+          </div>
+          <div class="field">
+            <label data-i18n="songs.key">Key</label>
+            <input type="text" id="songKey" value="F#" style="width:60px">
+          </div>
+        </div>
+
+        <div class="section-list" id="sectionList"></div>
+
+        <div class="add-row">
+          <select id="addType" data-i18n-options="sections.types">
+            <option value="intro" data-i18n="sections.types.intro">Intro</option>
+            <option value="verse" data-i18n="sections.types.verse">Verse</option>
+            <option value="pre" data-i18n="sections.types.pre">Pre-chorus</option>
+            <option value="chorus" selected data-i18n="sections.types.chorus">Chorus</option>
+            <option value="bridge" data-i18n="sections.types.bridge">Bridge</option>
+          </select>
+          <button class="icon-btn" id="addBtn" style="padding:6px 14px;font-size:13px;" data-i18n="sections.add">+ Add section</button>
+        </div>
+
+        <button class="generate-btn" id="genBtn" data-i18n="actions.export">Export HTML</button>
+
+        <div class="output-wrap" id="outputWrap" style="display:none">
+          <div class="out-header">
+            <span class="out-label" data-i18n="output.label">Generated HTML</span>
+            <button class="icon-btn copy-btn" id="copyBtn" data-i18n="actions.copy">Copy</button>
+          </div>
+          <textarea class="output" id="outputArea" readonly></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-panel">
+      <div class="preview-header">
+        <h3 data-i18n="preview.title">Preview</h3>
+      </div>
+      <div class="preview-content" id="previewContent"></div>
+    </div>
+  </div>
+
+  <script src="cifra_song_configurator.js"></script>
+</body>
+</html>

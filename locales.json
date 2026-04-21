@@ -1,0 +1,140 @@
+{
+  "en": {
+    "translation": {
+      "app": {
+        "title": "Chord Song Configurator",
+        "description": "Build sections and export HTML"
+      },
+      "songs": {
+        "label": "Songs",
+        "new": "+ New",
+        "newSong": "New Song",
+        "title": "Song title",
+        "key": "Key",
+        "sections": "sections",
+        "minSongsError": "You must have at least one song"
+      },
+      "sections": {
+        "add": "+ Add section",
+        "repeat": "Repeat",
+        "placeholder": "Chords, one line per row…",
+        "empty": "(empty)",
+        "types": {
+          "intro": "Intro",
+          "verse": "Verse",
+          "pre": "Pre-chorus",
+          "chorus": "Chorus",
+          "bridge": "Bridge"
+        }
+      },
+      "actions": {
+        "export": "Export HTML",
+        "copy": "Copy",
+        "copied": "Copied!"
+      },
+      "output": {
+        "label": "Generated HTML"
+      },
+      "preview": {
+        "title": "Preview",
+        "keyLabel": "Key:"
+      },
+      "viewer": {
+        "title": "Chord Viewer",
+        "songCounter": "Song {{current}} of {{total}}"
+      }
+    }
+  },
+  "pt": {
+    "translation": {
+      "app": {
+        "title": "Configurador de Cifras",
+        "description": "Construa seções e exporte HTML"
+      },
+      "songs": {
+        "label": "Músicas",
+        "new": "+ Nova",
+        "newSong": "Nova Música",
+        "title": "Título da música",
+        "key": "Tom",
+        "sections": "seções",
+        "minSongsError": "Você deve ter pelo menos uma música"
+      },
+      "sections": {
+        "add": "+ Adicionar seção",
+        "repeat": "Repetir",
+        "placeholder": "Acordes, uma linha por fileira…",
+        "empty": "(vazio)",
+        "types": {
+          "intro": "Introdução",
+          "verse": "Verso",
+          "pre": "Pré-refrão",
+          "chorus": "Refrão",
+          "bridge": "Ponte"
+        }
+      },
+      "actions": {
+        "export": "Exportar HTML",
+        "copy": "Copiar",
+        "copied": "Copiado!"
+      },
+      "output": {
+        "label": "HTML Gerado"
+      },
+      "preview": {
+        "title": "Visualização",
+        "keyLabel": "Tom:"
+      },
+      "viewer": {
+        "title": "Visualizador de Cifras",
+        "songCounter": "Música {{current}} de {{total}}"
+      }
+    }
+  },
+  "es": {
+    "translation": {
+      "app": {
+        "title": "Configurador de Acordes",
+        "description": "Construye secciones y exporta HTML"
+      },
+      "songs": {
+        "label": "Canciones",
+        "new": "+ Nueva",
+        "newSong": "Nueva Canción",
+        "title": "Título de la canción",
+        "key": "Tonalidad",
+        "sections": "secciones",
+        "minSongsError": "Debes tener al menos una canción"
+      },
+      "sections": {
+        "add": "+ Agregar sección",
+        "repeat": "Repetir",
+        "placeholder": "Acordes, una línea por fila…",
+        "empty": "(vacío)",
+        "types": {
+          "intro": "Introducción",
+          "verse": "Verso",
+          "pre": "Pre-estribillo",
+          "chorus": "Estribillo",
+          "bridge": "Puente"
+        }
+      },
+      "actions": {
+        "export": "Exportar HTML",
+        "copy": "Copiar",
+        "copied": "¡Copiado!"
+      },
+      "output": {
+        "label": "HTML Generado"
+      },
+      "preview": {
+        "title": "Vista previa",
+        "keyLabel": "Tonalidad:"
+      },
+      "viewer": {
+        "title": "Visor de Acordes",
+        "songCounter": "Canción {{current}} de {{total}}"
+      }
+    }
+  }
+}
