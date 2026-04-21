@@ -1,165 +1,79 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cifra Viewer</title>
-
-    <style>
-        body {
-            margin: 0;
-            font-family: monospace;
-            background: #0f172a;
-            color: #e5e7eb;
-            padding: 16px;
-        }
-
-        h1 {
-            font-size: 20px;
-            margin-bottom: 4px;
-        }
-
-        #content {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .section {
-            flex: 1;
-            padding: 12px;
-            border-radius: 10px;
-            background: #111827;
-        }
-
-        .title {
-            font-size: 12px;
-            font-weight: bold;
-            margin-bottom: 6px;
-            opacity: 0.8;
-        }
-
-        .line {
-            flex: 1;
-            text-align: center;
-            white-space: pre;
-            font-size: 24px;
-            font-weight: bold;
-            /* line-height: 1.6; */
-            position: relative;
-        }
-
-        .repeat-label {
-            position: absolute;
-            top: 50%;
-            left: 8px;
-            transform: translateY(-50%);
-            font-size: 126x;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-
-        /* cores */
-        .intro {
-            background-color: #3b82f6cc;
-        }
-
-        .verse {
-            background-color: #6b7280cc;
-        }
-
-        .pre {
-            background-color: #f59e0bcc;
-        }
-
-        .chorus {
-            background-color: #22c55ecc;
-        }
-
-        .bridge {
-            background-color: #8b5cf6cc;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="app.title">Configurador de Cifras</title>
+  <link rel="stylesheet" href="cifra_song_configurator.css">
+  <script src="i18n-config.js"></script>
 </head>
-
 <body>
+  <div class="layout-container">
+    <div class="left-panel">
+      <div class="root">
+        <h2 class="sr-only" data-i18n="app.description">Chord song configurator — build sections and export HTML</h2>
 
-    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
-        <button id="prevBtn" style="padding: 8px 12px; font-size: 18px; cursor: pointer;">◀</button>
-        <h1 id="title" style="flex: 1; margin: 0;"></h1>
-        <button id="nextBtn" style="padding: 8px 12px; font-size: 18px; cursor: pointer;">▶</button>
+        <!-- Language Selector -->
+        <div style="margin-bottom: 16px; text-align: right;">
+          <select id="languageSelect" onchange="changeLanguage(this.value)" style="font-size: 12px; padding: 4px 8px;">
+            <option value="pt">Português</option>
+            <option value="en">English</option>
+            <option value="es">Español</option>
+          </select>
+        </div>
+
+        <div class="song-manager">
+          <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
+            <label style="font-size: 12px; font-weight: 600; color: var(--color-text-secondary);" data-i18n="songs.label">Songs</label>
+            <button class="icon-btn" id="newSongBtn" style="padding:6px 12px;font-size:12px;" data-i18n="songs.new">+ New</button>
+          </div>
+          <div class="song-list" id="songListPanel"></div>
+        </div>
+
+        <div class="toolbar">
+          <div class="field">
+            <label data-i18n="songs.title">Song title</label>
+            <input type="text" id="songTitle" value="Example" style="width:200px">
+          </div>
+          <div class="field">
+            <label data-i18n="songs.key">Key</label>
+            <input type="text" id="songKey" value="F#" style="width:60px">
+          </div>
+        </div>
+
+        <div class="section-list" id="sectionList"></div>
+
+        <div class="add-row">
+          <select id="addType" data-i18n-options="sections.types">
+            <option value="intro" data-i18n="sections.types.intro">Intro</option>
+            <option value="verse" data-i18n="sections.types.verse">Verse</option>
+            <option value="pre" data-i18n="sections.types.pre">Pre-chorus</option>
+            <option value="chorus" selected data-i18n="sections.types.chorus">Chorus</option>
+            <option value="bridge" data-i18n="sections.types.bridge">Bridge</option>
+          </select>
+          <button class="icon-btn" id="addBtn" style="padding:6px 14px;font-size:13px;" data-i18n="sections.add">+ Add section</button>
+        </div>
+
+        <button class="generate-btn" id="genBtn" data-i18n="actions.export">Export HTML</button>
+
+        <div class="output-wrap" id="outputWrap" style="display:none">
+          <div class="out-header">
+            <span class="out-label" data-i18n="output.label">Generated HTML</span>
+            <button class="icon-btn copy-btn" id="copyBtn" data-i18n="actions.copy">Copy</button>
+          </div>
+          <textarea class="output" id="outputArea" readonly></textarea>
+        </div>
+      </div>
     </div>
-    <div id="content"></div>
 
-    <script>
-        const songList = [
-            {
-                title: "1 - Meu Refúgio",
-                key: "F#",
-                sections: [
-                    { type: "intro", repeat: 5, lines: "F# B9" },
-                    { type: "verse", repeat: 2, lines: "F# C#9 B9" },
-                    { type: "pre", repeat: 1, lines: "D#m A#m7 B9 C#99" },
-                    { type: "chorus", repeat: 1, lines: "F# C#9 B9\nD#m C#9 B9 C#9" },
-                    { type: "intro", repeat: 1, lines: "F# B9" },
-                    { type: "verse", repeat: 2, lines: "F# C#9 B9" },
-                    { type: "pre", repeat: 2, lines: "D#m A#m7 B9 C#9" },
-                    { type: "chorus", repeat: 2, lines: "F# C#9 B9\nD#m C#9 B9 C#9" },
-                    { type: "bridge", repeat: 1, lines: "D#m C#9 B9" },
-                    { type: "chorus", repeat: 1, lines: "F# C#9 B9\nD#m C#9 B9 C#9" },
-                    { type: "intro", repeat: 1, lines: "F# B9" },
-                ],
-            },
-        ];
+    <div class="right-panel">
+      <div class="preview-header">
+        <h3 data-i18n="preview.title">Preview</h3>
+      </div>
+      <div class="preview-content" id="previewContent"></div>
+    </div>
+  </div>
 
-        let currentSongIndex = 0;
-
-        function renderSong() {
-            const data = songList[currentSongIndex];
-            const container = document.getElementById("content");
-            container.innerHTML = "";
-
-            document.getElementById("title").innerText =
-                `${data.title} (Tom: ${data.key})`;
-
-            data.sections.forEach(section => {
-                const repeat = section.repeat || 1;
-
-                const div = document.createElement("div");
-                div.className = `section ${section.type}`;
-
-                const l = document.createElement("div");
-                l.className = "line";
-                l.innerText = section.lines;
-
-                if (repeat > 1) {
-                    const label = document.createElement("div");
-                    label.className = "repeat-label";
-                    label.innerText = `${repeat}X`;
-                    l.appendChild(label);
-                }
-
-                div.appendChild(l);
-
-                container.appendChild(div);
-            });
-        }
-
-        document.getElementById("prevBtn").addEventListener("click", () => {
-            currentSongIndex = (currentSongIndex - 1 + songList.length) % songList.length;
-            renderSong();
-        });
-
-        document.getElementById("nextBtn").addEventListener("click", () => {
-            currentSongIndex = (currentSongIndex + 1) % songList.length;
-            renderSong();
-        });
-
-        renderSong();
-    </script>
-
+  <script src="cifra_song_configurator.js"></script>
 </body>
-
 </html>
